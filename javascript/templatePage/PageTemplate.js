@@ -1,4 +1,4 @@
-import { Render } from './PageRenderHtml.js';
+import { MyPageAlbum } from '../myPages/pageAlbum.js';
 class DomClass {
     constructor() {
         this.myHostName = 'http://' + window.location.host;
@@ -19,6 +19,7 @@ class DomClass {
         }
         const ObjNavAwait = await import(ObjNav);
         const ObjNavInstance = new ObjNavAwait[id]();
+        const { Render } = await import('./PageRenderHtml.js');
         const MyForm = Render(ObjNavInstance);
         this.NavForm[id] = MyForm;
         MyContainerId.append(MyForm);
@@ -30,10 +31,11 @@ class MyContainer extends DomClass {
     constructor() {
         super();
         this.type = "div";
-        this.nav = new MyNav();
+        // this.nav = new MyNav();
+        this.pageLivret = new MyPageAlbum();
         this.footer = new MyFooter();
         this.props = { id: "MyDivId", class: "containter mt-5 pt-5 ml-3 pr-3 text-justify" };
-        this.children = [this.nav, this.footer];
+        this.children = [this.pageLivret, this.footer];
     }
 }
 
@@ -76,7 +78,7 @@ class MyNav extends DomClass {
                             "data-toggle": "collapse", "data-target": ".navbar-collapse.show",
                         },
                         children: [// Menu Arbre
-                            { type: "span", props: { onclick: () => { this.FunctionNavigate("../myPages/pageArbre.js", "MyPageArbre") }, id: "", class: "" }, children: ["Cliquer pour afficher l'Arbre de la Famille"] },
+                            // { type: "span", props: { onclick: () => { this.FunctionNavigate("../myPages/pageArbre.js", "MyPageArbre") }, id: "", class: "" }, children: ["Cliquer pour afficher l'Arbre de la Famille"] },
                         ]
                     },
                 ]

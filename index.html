@@ -13,19 +13,123 @@
 	<script type="text/javascript" src="./bootstrap/js/bootstrap.bundle.min.js" defer></script>
 	<script type="text/javascript" src="./bootstrap/js/bootstrap.min.js" defer></script>
 
+	<style>
+		#MyDivAlbumld {
+			width: 1000px;
+			height: 800px;
+			margin: 50px auto;
+			/* border: solid 1px #000; */
+		}
+
+		.maClasse {
+			display: inline-block;
+			vertical-align: top;
+			/* border: solid 1px orange; */
+		}
+	</style>
+
 	<!-- JavaScript pour Synoptique -->
-	<script type="text/javascript" src="./javascript/moduleLib/go.js" defer></script>
-	<script type="text/javascript" src="./javascript/moduleLib/Figures.js" defer></script>
+	<!-- <script type="text/javascript" src="./javascript/moduleLib/go.js" defer></script>
+	<script type="text/javascript" src="./javascript/moduleLib/Figures.js" defer></script> -->
 	<!-- <script type="text/javascript" src="./javascript/moduleTraitement/generate_synoptique.js" defer></script> -->
 
 	<!--Code Js exe-->
-	<script type="module" src="./javascript/templatePage/index.js" defer></script>
+	<!-- <script type="module" src="./javascript/templatePage/index.js" defer></script> -->
 
 </head>
 
 <body id="MyIdBody">
+	<div id="MyDivAlbumld">
 
+	</div>
 
 </body>
+
+<script>
+	// Function pour recuprer lensemble des images
+	functionRecupPathImages = () => {
+		var varImages = [];
+		// console.log('http://' + window.location.host + "/mesImages/");
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", 'http://' + window.location.host + "/mesImages/", true);
+		xhr.responseType = 'document';
+		xhr.onload = () => {
+			if (xhr.status === 200) {
+				var elements = xhr.response.getElementsByTagName("a");
+				for (x of elements) {
+					if (x.href.match(/\.(jpe?g|png|gif)$/)) {
+						varImages.push(`mesImages/${x.title}`);//x.getAttribute("href")
+					}
+				};
+			}
+			else {
+				alert('Request failed. Returned status of ' + xhr.status);
+			}
+		}
+		xhr.send();
+		return varImages;
+	}
+	// Function Chargement de la page
+	window.onload = function () {
+
+		var imagesPath = functionRecupPathImages();// ["mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df4.png", "mesImages/df6.png"];
+		var getContainerAlbum = document.getElementById("MyDivAlbumld");
+		var nbr = 20;
+		var im = 0;
+		var ang = [];
+		functionInitAlbum(nbr, getContainerAlbum, imagesPath, im, ang);
+	}
+
+	// Function Initialisation global
+	functionInitAlbum = (varNbr, varDiv, varImages, varIm, varAng) => {
+		for (let index = 0; index < varNbr; index++) {
+			try {
+				varDiv.removeChild(document.getElementById(index));
+			} catch (e) {
+				true;
+			}
+
+		}
+		// console.log(varImages.length);
+		for (let indexInit = 0; indexInit < varNbr; indexInit++) {
+			varAng[indexInit] = -indexInit * 15;
+			var createDiv = document.createElement("div");
+			createDiv.style.width = (varDiv.clientWidth / varNbr) + "px";
+			createDiv.style.height = varDiv.clientHeight + "px";
+			createDiv.className = "maClasse";
+			createDiv.setAttribute("id", indexInit);// Creation dun ID pour lutilisation dans lanimation
+			createDiv.style.visibility = "hidden";
+			createDiv.style.backgroundImage = "url('" + varImages[varIm] + "')";
+			createDiv.style.backgroundSize = varDiv.clientWidth + "px auto";
+			createDiv.style.backgroundPosition = (indexInit * 100 / (varNbr - 1)) + "% 50%";
+			createDiv.style.transform = "perspective(1000px) rotateY(" + varAng[indexInit] + "deg)";// Rotation des div
+			varDiv.appendChild(createDiv);
+		}
+		functionAnimer(varNbr, varDiv, varImages, varIm, varAng);
+	}
+
+	// Function pour animer les portions des divs
+	functionAnimer = (varNbr, varDiv, varImages, varIm, varAng) => {
+		t = setTimeout(functionAnimer, 10, varNbr, varDiv, varImages, varIm, varAng); // Creation dun timer pour lanimation
+		// Cibler chaque div pour lui appliquer une animation
+		for (let index = 0; index < varNbr; index++) {//
+			var ob = document.getElementById(index);
+			ob.style.transform = "perspective(1000px) rotateY(" + varAng[index] + "deg)";
+			if (varAng[index] > -90)
+				ob.style.visibility = "visible";// Afficher les divs au fur et a mesure a condition quil soit > a -90
+			if (varAng[index] < 0)
+				varAng[index] += 1; // Gestion du temps danimation
+			else
+				varAng[index] = 0;// Correction sil a des traits dans limage
+			if (varAng[varNbr - 1] == 0) {// Changement de limage
+				varIm += 1;
+				if (varIm > varImages.length - 1)
+					varIm = 0;
+				clearTimeout(t);
+				functionInitAlbum(varNbr, varDiv, varImages, varIm, varAng);
+			}
+		}
+	}
+</script>
 
 </html>
