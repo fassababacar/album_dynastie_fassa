@@ -48,10 +48,10 @@
 <script>
 	// Function pour recuprer lensemble des images
 	functionRecupPathImages = () => {
-		var varImages = [];
+		var varImages = ["mesImages/df1.png"];
 		// console.log('http://' + window.location.host + "/mesImages/");
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "/mesImages/", true);
+		xhr.open("GET", "mesImages/", true);
 		xhr.responseType = 'document';
 		xhr.onload = () => {
 			if (xhr.status === 200) {
@@ -73,8 +73,7 @@
 
 	// Function Chargement de la page
 	window.onload = function () {
-
-		var imagesPath = functionRecupPathImages();// ["mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df4.png", "mesImages/df6.png"];
+		var imagesPath = functionRecupPathImages(); //["mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df4.png", "mesImages/df6.png"];
 		var getContainerAlbum = document.getElementById("MyDivAlbumld");
 		var nbr = 20;
 		var im = 0;
