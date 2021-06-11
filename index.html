@@ -58,7 +58,7 @@
 				var elements = xhr.response.getElementsByTagName("a");
 				for (x of elements) {
 					if (x.href.match(/\.(jpe?g|png|gif)$/)) {
-						console.log('mesImages/' + x.title)
+						// console.log('mesImages/' + x.title)
 						varImages.push('mesImages/' + x.title);//x.getAttribute("href") `mesImages/${x.title}`
 					}
 				};
@@ -73,7 +73,31 @@
 
 	// Function Chargement de la page
 	window.onload = function () {
-		var imagesPath = functionRecupPathImages(); //["mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df4.png", "mesImages/df6.png"];
+		// var imagesPath = functionRecupPathImages(); //["mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df4.png", "mesImages/df6.png"];
+
+		var imagesPath = ["mesImages/df-1.png"];
+		// console.log('http://' + window.location.host + "/mesImages/");
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", 'http://' + window.location.host + "/mesImages", true);
+		xhr.responseType = 'document';
+		xhr.onload = () => {
+			if (xhr.status === 200) {
+				var elements = xhr.response.getElementsByTagName("a");
+				for (x of elements) {
+					if (x.href.match(/\.(jpe?g|png|gif)$/)) {
+						// console.log('mesImages/' + x.title)
+						imagesPath.push('mesImages/' + x.title);//x.getAttribute("href") `mesImages/${x.title}`
+					}
+				};
+			}
+			else {
+				alert('Request failed. Returned status of ' + xhr.status);
+			}
+		}
+		xhr.send();
+
+		console.log(imagesPath);
+
 		var getContainerAlbum = document.getElementById("MyDivAlbumld");
 		var nbr = 20;
 		var im = 0;
