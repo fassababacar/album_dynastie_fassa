@@ -51,7 +51,7 @@
 		var varImages = ["mesImages/df-1.png"];
 		// console.log('http://' + window.location.host + "/mesImages/");
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", 'http://' + window.location.host + "/mesImages/", true);
+		xhr.open("GET", 'http://' + window.location.host + "/mesImages", true);
 		xhr.responseType = 'document';
 		xhr.onload = () => {
 			if (xhr.status === 200) {
