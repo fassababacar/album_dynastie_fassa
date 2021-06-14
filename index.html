@@ -49,8 +49,9 @@
 	// Function pour recuprer lensemble des images
 	functionDiplayAlbumPhotoAjax = () => {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", 'https://' + window.location.host + "/mesImages", true);
+		xhr.open("GET", 'http://' + window.location.host + "/mesImages", true);
 		xhr.responseType = 'document';
+		console.log("varImagesAllPath");
 		xhr.onload = () => {
 			if (xhr.readyState == 4 && xhr.status === 200) {
 				var varImagesAllPath = ["mesImages/df1.png"];
@@ -61,6 +62,7 @@
 					}
 				};
 				// functionDiplayAlbumPhoto(varImagesAllPath);
+				console.log(varImagesAllPath);
 				var getContainerAlbum = document.getElementById("MyDivAlbumld");
 				var nbr = 20;
 				var im = 0;
