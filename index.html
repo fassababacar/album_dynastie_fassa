@@ -49,7 +49,7 @@
 	// Function pour recuprer lensemble des images
 	functionDiplayAlbumPhotoAjax = () => {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", 'http://' + window.location.host + "/mesImages", true);
+		xhr.open("GET", 'https://' + window.location.host + "/mesImages", true);
 		xhr.responseType = 'document';
 		xhr.onload = () => {
 			if (xhr.readyState == 4 && xhr.status === 200) {
