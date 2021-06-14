@@ -46,58 +46,50 @@
 </body>
 
 <script>
-
-	// var directory = "mesImages";
-	// var xmlHttp = new XMLHttpRequest();
-	// xmlHttp.open('GET', directory, false); // false for synchronous request
-	// xmlHttp.send(null);
-	// var ret = xmlHttp.responseText;
-	// // console.log(ret);
-	// var fileList = ret.split('\n');
-	// for (i = 0; i < fileList.length; i++) {
-	// 	var fileinfo = fileList[i].split(' ');
-	// 	if (fileinfo[0] == '201:') {
-	// 		document.write(fileinfo[1] + "<br>");
-	// 		document.write('<img src=\"' + directory + fileinfo[1] + '\"/>');
-	// 	}
-	// }
-
 	// Function pour recuprer lensemble des images
-	functionRecupPathImages = () => {
-		var varImages = ["mesImages/df-1.png"];
-		// console.log('http://' + window.location.host + "/mesImages/");
+	functionDiplayAlbumPhotoAjax = () => {
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", 'http://' + window.location.host + "/mesImages", true);
 		xhr.responseType = 'document';
 		xhr.onload = () => {
 			if (xhr.readyState == 4 && xhr.status === 200) {
+				var varImagesAllPath = [];
 				var elements = xhr.response.getElementsByTagName("a");
 				for (x of elements) {
 					if (x.href.match(/\.(jpe?g|png|gif)$/)) {
-						// console.log('mesImages/' + x.title)
-						varImages.push('mesImages/' + x.title);//x.getAttribute("href") `mesImages/${x.title}`
+						varImagesAllPath.push('mesImages/' + x.title);//x.getAttribute("href") `mesImages/${x.title}`
 					}
 				};
+				functionDiplayAlbumPhoto(varImagesAllPath);
 			}
 			else {
-				alert('Request failed. Returned status of ' + xhr.status);
+				alert('Erreur daffichage de lablbum ' + xhr.status);
 			}
 		}
 		xhr.send();
-		return varImages;
 	}
-	// console.log(functionRecupPathImages());
-	// var imagesPath = functionRecupPathImages();
+	// console.log(functionRecupPathImages(["babab"]));
+	functionDiplayAlbumPhotoAjax();
 
-	// Function Chargement de la page
-	window.onload = function () {
-		var imagesPath = ["mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df4.png", "mesImages/df6.png"];
+	// Function pour lancer laffichage au chargement
+	functionDiplayAlbumPhoto = (varImagesPath) => {
 		var getContainerAlbum = document.getElementById("MyDivAlbumld");
 		var nbr = 20;
 		var im = 0;
 		var ang = [];
-		functionInitAlbum(nbr, getContainerAlbum, imagesPath, im, ang);
+		functionInitAlbum(nbr, getContainerAlbum, varImagesPath, im, ang);
 	}
+
+	// // Function Chargement de la page
+	// window.onload = function () {
+	// 	var imagesPath = ["mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df1.png", "mesImages/df2.png", "mesImages/df3.png", "mesImages/df4.png", "mesImages/df6.png"];
+	// 	// console.log(imagesPath);
+	// 	var getContainerAlbum = document.getElementById("MyDivAlbumld");
+	// 	var nbr = 20;
+	// 	var im = 0;
+	// 	var ang = [];
+	// 	functionInitAlbum(nbr, getContainerAlbum, imagesPath, im, ang);
+	// }
 
 	// Function Initialisation global
 	functionInitAlbum = (varNbr, varDiv, varImages, varIm, varAng) => {
